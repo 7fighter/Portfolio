@@ -2,22 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+/* Dark Ops Portfolio Design System - All colors MUST be HSL */
 
-* {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+@layer base {
+  :root {
+    /* Dark Ops Color Palette */
+    --background: 0 0% 4%; /* #0A0A0A */
+    --foreground: 158 100% 80%; /* #00FFAB accent for text */
+    
+    --card: 0 0% 6%; /* Slightly lighter than background */
+    --card-foreground: 0 0% 90%; /* Light text on cards */
+    
+    --primary: 158 100% 50%; /* #00FFAB */
+    --primary-foreground: 0 0% 4%; /* Dark text on accent */
+    
+    --secondary: 0 0% 12%; /* Dark gray */
+    --secondary-foreground: 0 0% 80%; /* Light gray text */
+    
+    --muted: 0 0% 8%; /* Muted background */
+    --muted-foreground: 0 0% 60%; /* Muted text */
+    
+    --accent: 158 100% 50%; /* #00FFAB */
+    --accent-foreground: 0 0% 4%; /* Dark text on accent */
+    
+    --border: 0 0% 15%; /* Subtle borders */
+    --input: 0 0% 8%; /* Input backgrounds */
+    --ring: 158 100% 50%; /* Focus rings */
+    
+    --destructive: 0 75% 50%; /* Red for destructive actions */
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Portfolio specific colors */
+    --terminal-green: 158 100% 70%; /* Slightly lighter for readability */
+    --shadow-color: 158 100% 50%; /* Neon glow effect */
+    --dust-particle: 0 0% 70%; /* Dust animation particles */
+    
+    --radius: 0; /* Sharp edges, no rounded corners */
+  }
 }
 
-body {
-  background-color: #0A0A0A;
-  color: #FFFFFF;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    overflow-x: hidden;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-.glow-text {
-  text-shadow: 0 0 10px currentColor;
-}
-
-.neon-border {
-  border: 1px solid;
-  box-shadow: 0 0 10px currentColor;
+@layer components {
+  /* Terminal styling */
+  .terminal {
+    @apply bg-muted border border-border p-4;
+    box-shadow: 0 0 20px hsl(var(--shadow-color) / 0.3);
+  }
+  
+  /* Sharp card styling */
+  .ops-card {
+    @apply bg-card border border-border;
+    box-shadow: 0 4px 20px hsl(var(--shadow-color) / 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .ops-card:hover {
+    box-shadow: 0 8px 30px hsl(var(--shadow-color) / 0.2);
+  }
+  
+  /* Neon glow effect */
+  .neon-glow {
+    text-shadow: 0 0 10px hsl(var(--accent));
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.3);
+  }
+  
+  /* Button styling */
+  .ops-button {
+    @apply bg-secondary border border-border px-6 py-3 text-secondary-foreground;
+    transition: all 0.3s ease;
+  }
+  
+  .ops-button:hover {
+    @apply bg-accent text-accent-foreground;
+    box-shadow: 0 0 15px hsl(var(--accent) / 0.5);
+  }
 }
