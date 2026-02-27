@@ -1,179 +1,156 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { Copy, ExternalLink, Github } from 'lucide-react';
+import { motion, Variants } from 'framer-motion';
+import { Copy, ExternalLink, Github, Terminal, Layers, Globe } from 'lucide-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { toast } from 'sonner';
 import Layout from '@/components/Layout';
-import wrenchImage from '@/assets/wrench.jpg';
 
 const ProjectsSection = () => {
-  const objectRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const dustRef = useRef<HTMLDivElement>(null);
-
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'Full-stack MERN application with payment integration',
-      techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'Stripe'],
-      githubUrl: 'https://github.com/syedabbas/ecommerce-platform',
+      title: 'Digital Campus System',
+      id: 'PRJ-001',
+      description: 'Full-stack academic infrastructure with integrated secure payment gateways and student management.',
+      techStack: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
+      githubUrl: 'https://github.com/syedabbas/digital-campus',
       liveUrl: 'https://ecommerce-demo.com'
     },
     {
-      title: 'Task Management System',
-      description: 'Real-time collaborative task management with WebSocket',
-      techStack: ['React', 'Socket.io', 'Node.js', 'PostgreSQL'],
+      title: 'Real-time Collab Lab',
+      id: 'PRJ-002',
+      description: 'Industrial-grade task synchronization engine using WebSockets for zero-latency collaboration.',
+      techStack: ['React', 'Socket.io', 'PostgreSQL', 'Redis'],
       githubUrl: 'https://github.com/syedabbas/task-manager',
       liveUrl: 'https://taskmanager-demo.com'
     },
     {
-      title: 'Weather Analytics Dashboard',
-      description: 'Data visualization dashboard with weather API integration',
+      title: 'Weather Analytics Hub',
+      id: 'PRJ-003',
+      description: 'Advanced data visualization engine processing real-time meteorological API data with D3 rendering.',
       techStack: ['React', 'D3.js', 'Express', 'Redis'],
       githubUrl: 'https://github.com/syedabbas/weather-dashboard',
       liveUrl: 'https://weather-analytics.com'
     }
   ];
 
-  useEffect(() => {
-    const object = objectRef.current;
-    const content = contentRef.current;
-    const dust = dustRef.current;
-
-    if (!object || !content || !dust) return;
-
-    // Initial setup
-    gsap.set(object, { y: -300, rotation: 10 });
-    gsap.set(content, { x: 100, opacity: 0 });
-    gsap.set(dust, { opacity: 0 });
-
-    // Animation timeline
-    const tl = gsap.timeline();
-
-    // Drop animation
-    tl.to(object, {
-      y: 0,
-      rotation: 0,
-      duration: 1.2,
-      ease: "bounce.out"
-    })
-    // Dust effect
-    .to(dust, {
-      opacity: 1,
-      duration: 0.3
-    }, "-=0.3")
-    .to(dust, {
-      opacity: 0,
-      duration: 0.5
-    }, "+=0.2")
-    // Slide in content
-    .to(content, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.5");
-
-    return () => {
-      tl.kill();
-    };
-  }, []);
-
-  const handleCopyGithub = (url: string) => {
-    toast.success('GitHub URL copied to clipboard!');
+  const containerVars: Variants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.2, delayChildren: 0.1 } 
+    }
   };
 
-  const LeftColumnContent = () => (
-    <div className="relative">
-      <div
-        ref={objectRef}
-        className="w-48 h-48 flex items-center justify-center"
-      >
-        <img
-          src={wrenchImage}
-          alt="Wrench tool"
-          className="w-full h-full object-contain filter drop-shadow-lg"
-        />
-      </div>
-      {/* Dust particles */}
-      <div
-        ref={dustRef}
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-8 opacity-0"
-      >
-        <div className="w-full h-full bg-dust-particle opacity-30 blur-sm rounded-full"></div>
-      </div>
-    </div>
-  );
+  const itemVars: Variants = {
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" as const } 
+    }
+  };
+
+  const handleCopyGithub = () => {
+    toast.success('DATA_LINKED: GitHub URL copied to clipboard');
+  };
 
   return (
-    <Layout leftColumnContent={<LeftColumnContent />}>
-      <div ref={contentRef} className="space-y-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-accent mb-4">Projects</h1>
-          <p className="text-lg text-muted-foreground">
-            A showcase of my full-stack development work
-          </p>
-        </div>
+    <Layout>
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={containerVars}
+        className="max-w-6xl mx-auto pb-24"
+      >
+        {/* --- HEADER --- */}
+        <motion.div variants={itemVars} className="mb-16 pt-10">
+          <div className="flex items-center gap-3 text-accent font-mono text-xs tracking-[0.5em] mb-4">
+            <Terminal size={14} /> // DEPLOYMENT_ARCHIVE
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
+            SELECTED <br />
+            <span className="text-outline-white text-white/10 italic">WORKS</span>
+          </h1>
+        </motion.div>
 
-        <div className="grid gap-8">
+        {/* --- PROJECT GRID --- */}
+        <div className="grid grid-cols-1 gap-12">
           {projects.map((project, index) => (
-            <div key={index} className="ops-card p-6">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-card-foreground mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-secondary text-secondary-foreground text-sm border border-border"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+            <motion.div
+              key={index}
+              variants={itemVars}
+              whileHover={{ x: 10 }}
+              className="relative group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:bg-white/[0.04] transition-all duration-500"
+            >
+              {/* ID Badge */}
+              <div className="absolute top-8 right-8 font-mono text-[10px] text-muted-foreground opacity-50 group-hover:text-accent group-hover:opacity-100">
+                {project.id}
+              </div>
+
+              {/* LEFT: Project Info */}
+              <div className="lg:col-span-7 space-y-6">
+                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight group-hover:text-accent transition-colors">
+                  {project.title}
+                </h3>
+                
+                <p className="text-muted-foreground text-lg leading-relaxed max-w-xl">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {project.techStack.map((tech) => (
+                    <span 
+                      key={tech} 
+                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono tracking-widest text-accent/80"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
+              </div>
 
-                <div className="flex gap-3">
-                  <CopyToClipboard
-                    text={project.githubUrl}
-                    onCopy={() => handleCopyGithub(project.githubUrl)}
-                  >
-                    <button className="ops-button flex items-center gap-2">
-                      <Copy size={16} />
-                      <span className="hidden sm:inline">Copy GitHub</span>
-                    </button>
-                  </CopyToClipboard>
+              {/* RIGHT: Action Terminal */}
+              <div className="lg:col-span-5 flex flex-col gap-3">
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  className="flex items-center justify-between p-4 bg-accent text-black font-bold uppercase text-sm rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+                >
+                  Launch Live Demo <Globe size={18} />
+                </a>
 
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ops-button flex items-center gap-2"
-                  >
-                    <ExternalLink size={16} />
-                    <span className="hidden sm:inline">Live Demo</span>
-                  </a>
-
+                <div className="grid grid-cols-2 gap-3">
                   <a
                     href={project.githubUrl}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="ops-button flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-mono"
                   >
-                    <Github size={16} />
-                    <span className="hidden sm:inline">GitHub</span>
+                    <Github size={16} /> REPO
                   </a>
+                  
+                  <CopyToClipboard text={project.githubUrl} onCopy={handleCopyGithub}>
+                    <button className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-mono">
+                      <Copy size={16} /> COPY_LINK
+                    </button>
+                  </CopyToClipboard>
                 </div>
               </div>
-            </div>
+
+              {/* Decorative Accent Line */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 group-hover:h-2/3 bg-accent transition-all duration-500 rounded-r-full" />
+            </motion.div>
           ))}
         </div>
-      </div>
+
+        {/* --- DYNAMIC FOOTER --- */}
+        <motion.div variants={itemVars} className="mt-20 flex flex-col items-center justify-center space-y-4">
+            <div className="h-px w-24 bg-white/10" />
+            <p className="text-muted-foreground font-mono text-[10px] tracking-[0.5em] uppercase">
+              End_of_Archive
+            </p>
+            <Layers className="text-accent/20" size={40} />
+        </motion.div>
+      </motion.div>
     </Layout>
   );
 };

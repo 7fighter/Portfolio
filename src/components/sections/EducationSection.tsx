@@ -1,16 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { Calendar, MapPin, Award } from 'lucide-react';
+import { motion, Variants } from 'framer-motion';
+import { Calendar, MapPin, Award, GraduationCap, BookOpen, Star } from 'lucide-react';
 import Layout from '@/components/Layout';
-import booksImage from '@/assets/books.jpg';
 
 const EducationSection = () => {
-  const objectRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const book1Ref = useRef<HTMLDivElement>(null);
-  const book2Ref = useRef<HTMLDivElement>(null);
-  const book3Ref = useRef<HTMLDivElement>(null);
-
   const education = [
     {
       degree: 'Bachelor of Science in Computer Science',
@@ -18,7 +10,8 @@ const EducationSection = () => {
       location: 'Lahore, Pakistan',
       period: '2019 - 2023',
       grade: 'CGPA: 3.8/4.0',
-      description: 'Specialized in Software Engineering and Database Systems. Active member of the Computer Science Society.'
+      description: 'The era of architecture. Specialized in Software Engineering and Database Systems. This phase defined my core logic and problem-solving framework.',
+      tags: ['Software Engineering', 'Databases', 'Logic']
     },
     {
       degree: 'Intermediate in Computer Science',
@@ -26,7 +19,8 @@ const EducationSection = () => {
       location: 'Lahore, Pakistan',
       period: '2017 - 2019',
       grade: 'Marks: 85%',
-      description: 'Focused on mathematics, physics, and computer fundamentals. Participated in various programming competitions.'
+      description: 'The foundation of code. Transitioned from theory to practical implementation, focusing on mathematics and physics fundamentals.',
+      tags: ['Mathematics', 'Physics', 'Fundamentals']
     },
     {
       degree: 'Matriculation in Science',
@@ -34,140 +28,122 @@ const EducationSection = () => {
       location: 'Lahore, Pakistan',
       period: '2015 - 2017',
       grade: 'Marks: 92%',
-      description: 'Strong foundation in mathematics and sciences. Class representative and academic excellence award recipient.'
+      description: 'The spark of curiosity. Strong foundation in sciences and academic excellence that paved the way for a technical future.',
+      tags: ['Science', 'Academic Excellence']
     }
   ];
 
-  useEffect(() => {
-    const content = contentRef.current;
-    const book1 = book1Ref.current;
-    const book2 = book2Ref.current;
-    const book3 = book3Ref.current;
+  const containerVars: Variants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.3 } 
+    }
+  };
 
-    if (!content || !book1 || !book2 || !book3) return;
-
-    // Initial setup
-    gsap.set([book1, book2, book3], { y: -400, rotation: Math.random() * 20 - 10 });
-    gsap.set(content, { x: 100, opacity: 0 });
-
-    // Animation timeline
-    const tl = gsap.timeline();
-
-    // Drop books sequentially
-    tl.to(book1, {
-      y: 0,
-      rotation: 0,
-      duration: 0.8,
-      ease: "bounce.out"
-    })
-    .to(book2, {
-      y: -20, // Stack effect
-      rotation: 0,
-      duration: 0.8,
-      ease: "bounce.out"
-    }, "-=0.4")
-    .to(book3, {
-      y: -40, // Stack effect
-      rotation: 0,
-      duration: 0.8,
-      ease: "bounce.out"
-    }, "-=0.4")
-    // Slide in content
-    .to(content, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.5");
-
-    return () => {
-      tl.kill();
-    };
-  }, []);
-
-  const LeftColumnContent = () => (
-    <div className="relative w-48 h-48 flex items-end justify-center">
-      <div ref={book1Ref} className="absolute w-32 h-40">
-        <img
-          src={booksImage}
-          alt="Stack of books"
-          className="w-full h-full object-contain filter drop-shadow-lg"
-        />
-      </div>
-      <div ref={book2Ref} className="absolute w-32 h-40">
-        <img
-          src={booksImage}
-          alt="Stack of books"
-          className="w-full h-full object-contain filter drop-shadow-lg opacity-80"
-        />
-      </div>
-      <div ref={book3Ref} className="absolute w-32 h-40">
-        <img
-          src={booksImage}
-          alt="Stack of books"
-          className="w-full h-full object-contain filter drop-shadow-lg opacity-60"
-        />
-      </div>
-    </div>
-  );
+  const itemVars: Variants = {
+    hidden: { x: -20, opacity: 0 },
+    visible: { 
+      x: 0, 
+      opacity: 1, 
+      transition: { duration: 0.6, ease: "easeOut" as const } 
+    }
+  };
 
   return (
-    <Layout leftColumnContent={<LeftColumnContent />}>
-      <div ref={contentRef} className="space-y-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-accent mb-4">Education</h1>
-          <p className="text-lg text-muted-foreground">
-            My academic journey and qualifications
-          </p>
-        </div>
+    <Layout>
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={containerVars}
+        className="max-w-5xl mx-auto pb-24"
+      >
+        {/* --- HEADER: The Quest Log --- */}
+        <motion.div variants={itemVars} className="mb-16 pt-10">
+          <div className="flex items-center gap-2 text-accent font-mono text-xs tracking-widest mb-4">
+            <GraduationCap size={16} /> 02 // ACADEMIC_HISTORY.log
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
+            KNOWLEDGE <br />
+            <span className="text-outline-white text-white/10 italic">ACQUISITION</span>
+          </h1>
+        </motion.div>
 
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-4 top-8 bottom-8 w-0.5 bg-border hidden md:block"></div>
+        {/* --- STORYLINE TIMELINE --- */}
+        <div className="relative space-y-20">
+          {/* Central Vertical Line (The Path) */}
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-accent/50 via-white/5 to-transparent hidden md:block" />
 
-          <div className="space-y-8">
-            {education.map((edu, index) => (
-              <div key={index} className="relative">
-                {/* Timeline Dot */}
-                <div className="absolute left-2 top-6 w-4 h-4 bg-accent rounded-full border-4 border-background hidden md:block neon-glow"></div>
-                
-                <div className="md:ml-12 ops-card p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-accent mb-2">
-                        {edu.degree}
-                      </h3>
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-card-foreground">
-                          <Award size={16} className="text-accent" />
-                          <span className="font-medium">{edu.institution}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <MapPin size={16} />
-                          <span>{edu.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Calendar size={16} />
-                          <span>{edu.period}</span>
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground mb-3">
-                        {edu.description}
-                      </p>
-                    </div>
-                    
-                    <div className="bg-secondary px-4 py-2 border border-border lg:ml-4">
-                      <span className="text-secondary-foreground font-semibold">
-                        {edu.grade}
+          {education.map((edu, index) => (
+            <motion.div 
+              key={index}
+              variants={itemVars}
+              className={`relative flex flex-col md:flex-row items-center gap-8 ${
+                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+              }`}
+            >
+              {/* The Timeline Marker (The Data Point) */}
+              <div className="absolute left-[-2px] md:left-1/2 md:ml-[-10px] top-0 w-[20px] h-[20px] bg-black border-2 border-accent rounded-full z-10 hidden md:block">
+                <div className="w-full h-full animate-ping bg-accent/30 rounded-full" />
+              </div>
+
+              {/* Content Card (The Story Fragment) */}
+              <div className={`w-full md:w-[45%] group`}>
+                <div className="bg-white/[0.03] border border-white/5 p-8 rounded-3xl hover:border-accent/30 transition-all duration-500 backdrop-blur-xl relative overflow-hidden">
+                  
+                  {/* Floating Grade Badge */}
+                  <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-100 group-hover:text-accent transition-opacity font-mono text-sm">
+                    {edu.grade}
+                  </div>
+
+                  <span className="inline-block px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-mono mb-4">
+                    LEVEL_0{education.length - index}
+                  </span>
+
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">
+                    {edu.degree}
+                  </h3>
+                  
+                  <div className="flex flex-wrap gap-4 text-xs font-mono text-muted-foreground mb-6">
+                    <span className="flex items-center gap-1"><Award size={12} /> {edu.institution}</span>
+                    <span className="flex items-center gap-1"><MapPin size={12} /> {edu.location}</span>
+                    <span className="flex items-center gap-1"><Calendar size={12} /> {edu.period}</span>
+                  </div>
+
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 italic">
+                    "{edu.description}"
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {edu.tags.map(tag => (
+                      <span key={tag} className="text-[9px] border border-white/10 px-2 py-1 rounded-sm uppercase tracking-tighter">
+                        {tag}
                       </span>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Decorative Visual (The Void Filler) */}
+              <div className="hidden md:flex w-[45%] justify-center items-center opacity-20 group-hover:opacity-100 transition-opacity">
+                 {index % 2 === 0 ? <BookOpen size={100} /> : <Star size={100} />}
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+
+        {/* --- SUMMARY FOOTER --- */}
+        <motion.div 
+          variants={itemVars}
+          className="mt-32 p-12 border border-white/5 bg-gradient-to-br from-accent/5 to-transparent rounded-[40px] text-center"
+        >
+          <h3 className="text-2xl font-bold mb-4 uppercase italic">Current Status: Continuous Learner</h3>
+          <p className="text-muted-foreground max-w-2xl mx-auto font-mono text-sm leading-relaxed">
+            Education is not the learning of facts, but the training of the mind to think. 
+            I am currently expanding my knowledge in <span className="text-accent">Microservices</span> and <span className="text-accent">Advanced System Design</span>.
+          </p>
+        </motion.div>
+      </motion.div>
     </Layout>
   );
 };

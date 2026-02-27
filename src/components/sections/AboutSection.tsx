@@ -1,220 +1,161 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { Code, Database, Server, Palette, Brain, Target } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Code, Database, Server, Palette, Brain, Target, Cpu, Shield } from 'lucide-react';
 import Layout from '@/components/Layout';
+// If identityMaskImage is causing issues, you can replace with a placeholder or local path
 import identityMaskImage from '@/assets/identity-mask.jpg';
+import { Variants } from 'framer-motion'; // Ensure this is imported
 
 const AboutSection = () => {
-  const objectRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const dustRef = useRef<HTMLDivElement>(null);
-
   const skills = [
     {
-      category: 'Frontend Development',
+      category: 'Frontend_Core',
       icon: Code,
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Next.js', 'Vue.js']
+      color: 'text-blue-400',
+      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Next.js', 'Framer Motion']
     },
     {
-      category: 'Backend Development',
+      category: 'Backend_Architecture',
       icon: Server,
+      color: 'text-purple-400',
       technologies: ['Node.js', 'Express', 'Python', 'Django', 'RESTful APIs']
     },
     {
-      category: 'Database Systems',
+      category: 'Database_Systems',
       icon: Database,
-      technologies: ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'Firebase']
+      color: 'text-green-400',
+      technologies: ['MongoDB', 'PostgreSQL', 'Redis', 'Firebase']
     },
     {
-      category: 'Design & UX',
+      category: 'Design_UX',
       icon: Palette,
-      technologies: ['Figma', 'Adobe XD', 'Photoshop', 'UI/UX Design', 'Prototyping']
+      color: 'text-pink-400',
+      technologies: ['Figma', 'UI/UX Design', 'Prototyping', 'Responsive Systems']
     }
   ];
 
-  const achievements = [
-    '3+ years of full-stack development experience',
-    'Led development team of 5 members in university project',
-    'Built 15+ responsive web applications',
-    'Contributed to 3 open-source projects',
-    'Mentored 10+ junior developers'
-  ];
+ const containerVars: Variants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1, 
+    transition: { 
+      staggerChildren: 0.1, 
+      delayChildren: 0.2 
+    } 
+  }
+};
 
-  useEffect(() => {
-    const object = objectRef.current;
-    const content = contentRef.current;
-    const dust = dustRef.current;
-
-    if (!object || !content || !dust) return;
-
-    // Initial setup
-    gsap.set(object, { y: -300, rotation: 10, opacity: 0 });
-    gsap.set(content, { x: 100, opacity: 0 });
-    gsap.set(dust, { opacity: 0 });
-
-    // Animation timeline
-    const tl = gsap.timeline();
-
-    // Drop animation with glow effect
-    tl.to(object, {
-      y: 0,
-      rotation: 0,
-      opacity: 1,
-      duration: 1.2,
-      ease: "bounce.out"
-    })
-    // Dust effect
-    .to(dust, {
-      opacity: 1,
-      duration: 0.3
-    }, "-=0.3")
-    .to(dust, {
-      opacity: 0,
-      duration: 0.5
-    }, "+=0.2")
-    // Slide in content
-    .to(content, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    }, "-=0.5");
-
-    return () => {
-      tl.kill();
-    };
-  }, []);
-
-  const LeftColumnContent = () => (
-    <div className="relative">
-      <div
-        ref={objectRef}
-        className="w-48 h-48 flex items-center justify-center"
-      >
-        <img
-          src={identityMaskImage}
-          alt="Identity mask"
-          className="w-full h-full object-contain filter drop-shadow-lg neon-glow"
-        />
-      </div>
-      {/* Dust particles */}
-      <div
-        ref={dustRef}
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-8 opacity-0"
-      >
-        <div className="w-full h-full bg-dust-particle opacity-30 blur-sm rounded-full"></div>
-      </div>
-    </div>
-  );
+const itemVars: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.5, 
+      ease: "easeOut" as const // Adding 'as const' fixes the Type error
+    } 
+  }
+};
 
   return (
-    <Layout leftColumnContent={<LeftColumnContent />}>
-      <div ref={contentRef} className="space-y-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-accent mb-4">About Me</h1>
-          <p className="text-lg text-muted-foreground">
-            Full-Stack Developer & Problem Solver
-          </p>
-        </div>
+    <Layout>
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={containerVars}
+        className="max-w-6xl mx-auto space-y-12 pb-20"
+      >
+        {/* --- HERO HEADER --- */}
+        <motion.div variants={itemVars} className="relative pt-10">
+          <span className="text-accent font-mono text-sm tracking-[0.5em] block mb-2 underline underline-offset-8 decoration-accent/30">
+            &gt; CLASSIFIED_IDENTITY
+          </span>
+          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
+            THE_HUMAN <span className="text-outline-white text-white/10">CORE</span>
+          </h1>
+        </motion.div>
 
-        {/* Personal Introduction */}
-        <div className="ops-card p-8">
-          <div className="flex flex-col lg:flex-row gap-8 items-center">
-            <div className="w-48 h-48 bg-muted border border-border flex items-center justify-center">
-              <div className="text-6xl text-accent">S.A</div>
+        {/* --- PERSONAL INTRO (Bento Style) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <motion.div 
+            variants={itemVars}
+            className="md:col-span-8 bg-white/[0.02] border border-white/5 p-8 rounded-3xl backdrop-blur-xl relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+               <Cpu size={120} className="text-accent" />
             </div>
             
-            <div className="flex-1 space-y-4">
-              <h2 className="text-2xl font-semibold text-card-foreground">
-                Syed Muhammad Abbas
-              </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                I'm a passionate full-stack developer with expertise in the MERN stack. 
-                My journey in software development began during my university years, and 
-                I've since built numerous web applications that solve real-world problems. 
-                I believe in writing clean, efficient code and creating user experiences 
-                that are both functional and beautiful.
+            <h2 className="text-3xl font-bold mb-6 text-accent">Syed Muhammad Abbas</h2>
+            <div className="space-y-4 text-muted-foreground text-lg leading-relaxed max-w-2xl">
+              <p>
+                I'm a <span className="text-white font-medium">Full-Stack Architect</span> who obsesses over the MERN stack. I don't just write code; I build digital ecosystems that are scalable, efficient, and visually aggressive.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
-                When I'm not coding, you'll find me exploring new technologies, 
-                contributing to open-source projects, or planning my next chess move. 
-                I'm always eager to take on new challenges and collaborate with 
-                like-minded developers.
+              <p>
+                My development philosophy is simple: <span className="italic">"If it works but feels slow, it's broken."</span> I bridge the gap between heavy backend logic and buttery-smooth frontend motion.
               </p>
             </div>
-          </div>
+          </motion.div>
+
+          <motion.div 
+            variants={itemVars}
+            className="md:col-span-4 bg-accent p-8 rounded-3xl flex flex-col justify-between text-black"
+          >
+            <div className="space-y-2">
+                <Target size={40} />
+                <h3 className="text-2xl font-black uppercase tracking-tight">Focus_Area</h3>
+                <p className="font-mono text-xs font-bold">REACTIVE_SYSTEMS.v26</p>
+            </div>
+            <p className="text-sm font-medium leading-tight mt-10">
+              Specializing in low-latency interfaces and complex state management.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Skills Grid */}
+        {/* --- SKILLS GRID --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {skills.map((skill, idx) => (
+            <motion.div 
+              key={idx}
+              variants={itemVars}
+              whileHover={{ y: -5, borderColor: 'rgba(139, 92, 246, 0.5)' }}
+              className="bg-white/[0.02] border border-white/5 p-6 rounded-2xl transition-colors"
+            >
+              <skill.icon className={`mb-4 ${skill.color}`} size={24} />
+              <h3 className="text-sm font-mono font-bold mb-4 uppercase tracking-widest">{skill.category}</h3>
+              <div className="flex flex-wrap gap-2">
+                {skill.technologies.map(tech => (
+                  <span key={tech} className="text-[10px] px-2 py-1 bg-white/5 border border-white/10 rounded uppercase font-mono">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* --- ACHIEVEMENTS & PHILOSOPHY --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {skills.map((skill, index) => {
-            const Icon = skill.icon;
-            return (
-              <div key={index} className="ops-card p-6 group hover:neon-glow transition-all duration-300">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-accent text-accent-foreground p-2 group-hover:scale-110 transition-transform duration-300">
-                    <Icon size={20} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-card-foreground">
-                    {skill.category}
-                  </h3>
-                </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  {skill.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-secondary text-secondary-foreground text-sm border border-border"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+           <motion.div variants={itemVars} className="p-8 border-l-2 border-accent bg-white/[0.01]">
+              <h3 className="flex items-center gap-2 text-xl font-bold mb-6 italic uppercase">
+                <Shield size={20} className="text-accent" /> Performance_Metrics
+              </h3>
+              <ul className="space-y-4 font-mono text-xs text-muted-foreground">
+                <li className="flex gap-4"><span className="text-accent">[01]</span> 3+ Years Experience</li>
+                <li className="flex gap-4"><span className="text-accent">[02]</span> 15+ Responsive Systems Deployed</li>
+                <li className="flex gap-4"><span className="text-accent">[03]</span> Open-Source Contributor</li>
+                <li className="flex gap-4"><span className="text-accent">[04]</span> Team Leadership (5 Members)</li>
+              </ul>
+           </motion.div>
 
-        {/* Achievements */}
-        <div className="ops-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-accent text-accent-foreground p-2">
-              <Target size={20} />
-            </div>
-            <h3 className="text-xl font-semibold text-card-foreground">
-              Key Achievements
-            </h3>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {achievements.map((achievement, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-accent"></div>
-                <span className="text-muted-foreground">{achievement}</span>
-              </div>
-            ))}
-          </div>
+           <motion.div variants={itemVars} className="p-8 bg-white/[0.03] rounded-3xl relative overflow-hidden">
+              <Brain className="absolute -bottom-10 -right-10 text-white opacity-5" size={200} />
+              <p className="text-lg italic text-muted-foreground leading-relaxed relative z-10">
+                "Clean code is not written by following a set of rules. Clean code is written by 
+                programmers who care about their craft. Every line should serve a purpose."
+              </p>
+              <p className="mt-4 font-mono text-accent text-sm">— SYSTEM_MANIFESTO</p>
+           </motion.div>
         </div>
-
-        {/* Philosophy */}
-        <div className="ops-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-accent text-accent-foreground p-2">
-              <Brain size={20} />
-            </div>
-            <h3 className="text-xl font-semibold text-card-foreground">
-              Development Philosophy
-            </h3>
-          </div>
-          
-          <blockquote className="text-muted-foreground italic text-lg leading-relaxed border-l-4 border-accent pl-6">
-            "Clean code is not written by following a set of rules. Clean code is written by 
-            programmers who care about their craft. The key is to find a balance between 
-            functionality, maintainability, and elegance. Every line of code should serve 
-            a purpose, and every feature should solve a real problem."
-          </blockquote>
-        </div>
-      </div>
+      </motion.div>
     </Layout>
   );
 };

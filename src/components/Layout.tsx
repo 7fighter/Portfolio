@@ -1,16 +1,14 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { gsap } from 'gsap';
+import { motion } from 'framer-motion';
 import { Home, Code, GraduationCap, Camera, User, Phone } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
-  leftColumnContent?: ReactNode;
 }
 
-const Layout = ({ children, leftColumnContent }: LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
-  const navRef = useRef<HTMLDivElement>(null);
 
   const navigationItems = [
     { path: '/', icon: Home, label: 'Home' },
@@ -21,74 +19,75 @@ const Layout = ({ children, leftColumnContent }: LayoutProps) => {
     { path: '/contact', icon: Phone, label: 'Contact' }
   ];
 
-  useEffect(() => {
-    // Animate navigation on mount
-    if (navRef.current) {
-      gsap.fromTo(navRef.current, 
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
-      );
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top Navigation */}
-      <nav
-        ref={navRef}
-        className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border"
-      >
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="text-xl font-bold text-accent hover:neon-glow transition-all">
-              S.M.Abbas
-            </Link>
-            
-            <div className="flex gap-6">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center gap-2 px-4 py-2 transition-all duration-300 ${
-                      isActive 
-                        ? 'text-accent neon-glow' 
-                        : 'text-muted-foreground hover:text-accent hover:neon-glow'
-                    }`}
-                  >
-                    <Icon size={18} />
-                    <span className="hidden md:inline">{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-accent/30 overflow-x-hidden">
+      
+      {/* --- DYNAMIC AMBIENCE --- */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,_rgba(139,92,246,0.05),transparent_70%)]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-accent/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full" />
+      </div>
+
+      {/* --- LEFT HUD BAR (Vertical Navigation) --- */}
+      <nav className="fixed left-0 top-0 h-full w-20 border-r border-white/5 bg-black/40 backdrop-blur-xl z-50 flex flex-col items-center py-10 justify-between">
+        <Link to="/" className="text-accent font-black text-2xl tracking-tighter hover:scale-110 transition-transform">
+          A.
+        </Link>
+
+        <div className="flex flex-col gap-8">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+            return (
+              <Link key={item.path} to={item.path} className="relative group">
+                <Icon 
+                  size={22} 
+                  className={`transition-colors duration-300 ${isActive ? 'text-accent' : 'text-muted-foreground group-hover:text-white'}`} 
+                />
+                {isActive && (
+                  <motion.div 
+                    layoutId="activeNav"
+                    className="absolute -left-6 top-0 w-1 h-full bg-accent shadow-[0_0_15px_#8b5cf6]" 
+                  />
+                )}
+                {/* Tooltip */}
+                <span className="absolute left-14 top-0 px-2 py-1 bg-accent text-[10px] font-mono rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
         </div>
+
+        <div className="whitespace-nowrap text-[10px] font-mono text-muted-foreground tracking-[0.2em] uppercase origin-left -rotate-90 translate-x-1/2">
+  Abbas_Dev_v2.6
+</div>
       </nav>
 
-      {/* Main Content */}
-      <div className="pt-20">
-        <div className="container mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-[calc(100vh-8rem)]">
-            {/* Left Column - Animation Area */}
-            <div className="lg:col-span-1 flex items-center justify-center">
-              <div className="w-full max-w-md aspect-square flex items-center justify-center">
-                {leftColumnContent}
-              </div>
-            </div>
-
-            {/* Right Column - Content */}
-            <div className="lg:col-span-2">
-              <div className="max-w-4xl mx-auto">
-                {children}
-              </div>
-            </div>
-          </div>
+      {/* --- TOP STATUS BAR --- */}
+      <header className="fixed top-0 left-20 right-0 h-16 border-b border-white/5 bg-black/20 backdrop-blur-md z-40 flex items-center justify-between px-8">
+        <div className="flex items-center gap-4">
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">
+            System_Status: Optimal
+          </span>
         </div>
-      </div>
+        <div className="hidden md:flex gap-6 text-[10px] font-mono text-muted-foreground">
+          <span>LAT: 33.78</span>
+          <span>LONG: 72.36</span>
+        </div>
+      </header>
+
+      {/* --- MAIN CONTENT CONTAINER --- */}
+      <main className="pl-20 pt-16 relative z-10">
+        <div className="container mx-auto px-6 py-12">
+          {children}
+        </div>
+      </main>
+
+      {/* --- SCANLINE EFFECT --- */}
+      <div className="fixed inset-0 pointer-events-none z-[100] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
     </div>
   );
 };
