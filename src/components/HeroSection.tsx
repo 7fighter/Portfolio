@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import heroImage from '@/assets/hero-hacker.jpg';
 
@@ -9,183 +10,131 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onComplete }: HeroSectionProps) => {
   const navigate = useNavigate();
-  const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const monitorRef = useRef<HTMLDivElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  const buttonsRef = useRef<HTMLDivElement>(null);
-  const [currentText, setCurrentText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const [isBooted, setIsBooted] = useState(false);
+  const [glitchText, setGlitchText] = useState("INITIALIZING");
 
-  const fullText = [
-    'Hey, my name is',
-    'Syed Muhammad Abbas...',
-    'Welcome to my portfolio.'
-  ];
+  // Keyboard shortcut listener for ESC key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onComplete();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Cleanup: remove listener when component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onComplete]);
+
+  // Modern "Scrambler" effect
+  const scramble = (finalText: string) => {
+    const chars = "!<>-_\\/[]{}—=+*^?#________";
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setGlitchText(prev => 
+        finalText.split("").map((letter, index) => {
+          if (index < iteration) return finalText[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
+      );
+      if (iteration >= finalText.length) clearInterval(interval);
+      iteration += 1 / 3;
+    }, 30);
+  };
 
   useEffect(() => {
-    const container = containerRef.current;
-    const image = imageRef.current;
-    const monitor = monitorRef.current;
-    const terminal = terminalRef.current;
-    const buttons = buttonsRef.current;
-
-    if (!container || !image || !monitor || !terminal || !buttons) return;
-
-    // Initial setup
-    gsap.set(monitor, { opacity: 0, scale: 0 });
-    gsap.set(terminal, { opacity: 0 });
-    gsap.set(buttons, { opacity: 0, y: 20 });
-
-    // Main timeline
-    const tl = gsap.timeline();
-
-    // Camera zoom effect
-    tl.to(image, {
-      scale: 2.5,
-      duration: 3,
-      ease: "power2.inOut"
-    })
-    // Show monitor overlay
-    .to(monitor, {
-      opacity: 1,
-      scale: 1,
-      duration: 1,
-      ease: "power2.out"
-    }, "-=1")
-    // Show terminal
-    .to(terminal, {
-      opacity: 1,
-      duration: 0.5
-    })
-    // Start typing animation
-    .call(() => {
-      startTypingAnimation();
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsBooted(true);
+        scramble("SYSTEM_ACTIVE");
+      }
     });
 
-    return () => {
-      tl.kill();
-    };
+    tl.fromTo(imageRef.current, 
+      { scale: 1.5, filter: 'brightness(2) contrast(2)' },
+      { scale: 1, filter: 'brightness(0.4) contrast(1.1)', duration: 1, ease: "expo.out" }
+    );
+
+    setTimeout(() => scramble("DECRYPTING_BIO"), 300);
   }, []);
 
-  const startTypingAnimation = () => {
-    let lineIndex = 0;
-    let charIndex = 0;
-    let currentLine = '';
-
-    const typeCharacter = () => {
-      if (lineIndex >= fullText.length) {
-        setShowCursor(false);
-        // Show buttons after typing is complete
-        gsap.to(buttonsRef.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          onComplete: () => {
-            setAnimationComplete(true);
-            onComplete();
-          }
-        });
-        return;
-      }
-
-      const line = fullText[lineIndex];
-      
-      if (charIndex < line.length) {
-        currentLine += line[charIndex];
-        setCurrentText(prev => {
-          const lines = prev.split('\n');
-          lines[lineIndex] = currentLine;
-          return lines.join('\n');
-        });
-        charIndex++;
-        setTimeout(typeCharacter, 50 + Math.random() * 50); // Realistic typing speed
-      } else {
-        // Move to next line
-        lineIndex++;
-        charIndex = 0;
-        currentLine = '';
-        setCurrentText(prev => prev + '\n');
-        setTimeout(typeCharacter, 500); // Pause between lines
-      }
-    };
-
-    typeCharacter();
-
-    // Cursor blinking
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 500);
-
-    return () => clearInterval(cursorInterval);
-  };
-
-  const handleNavigation = (section: string) => {
-    navigate(`/${section}`);
-  };
+  const navItems = [
+    { label: 'PROJECTS', path: 'projects' },
+    { label: 'IDENTITY', path: 'about' },
+    { label: 'CONTACT', path: 'contact' },
+  ];
 
   return (
-    <div ref={containerRef} className="fixed inset-0 bg-background overflow-hidden">
-      {/* Hero Background Image */}
-      <div className="absolute inset-0">
+    <div className="fixed inset-0 bg-black overflow-hidden flex items-center justify-center">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
         <img
           ref={imageRef}
           src={heroImage}
-          alt="Hooded figure at computer"
-          className="w-full h-full object-cover"
-          style={{ transformOrigin: 'center center' }}
+          className="w-full h-full object-cover grayscale opacity-50"
+          alt="hero"
         />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none" />
       </div>
 
-      {/* Monitor Overlay */}
-      <div
-        ref={monitorRef}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        <div className="w-[600px] h-[400px] bg-muted border-2 border-border relative">
-          {/* Terminal Window */}
-          <div
-            ref={terminalRef}
-            className="terminal w-full h-full p-8 flex flex-col justify-center"
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-5xl px-10">
+        <div className="flex flex-col items-start">
+          <motion.div 
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="flex items-center gap-3 mb-6"
           >
-            <div className="text-xl font-mono text-terminal-green leading-relaxed">
-              {currentText.split('\n').map((line, index) => (
-                <div key={index} className="min-h-[1.5rem]">
-                  {line}
-                  {index === currentText.split('\n').length - 1 && showCursor && (
-                    <span className="animate-pulse">|</span>
-                  )}
-                </div>
-              ))}
-            </div>
+            <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+            <span className="font-mono text-accent text-xs tracking-[0.4em] uppercase">
+              {glitchText}
+            </span>
+          </motion.div>
 
-            {/* Navigation Buttons */}
-            <div
-              ref={buttonsRef}
-              className="flex flex-wrap gap-4 mt-8 justify-center opacity-0"
-            >
-              {[
-                { label: 'Projects', path: 'projects' },
-                { label: 'Education', path: 'education' },
-                { label: 'Hobbies', path: 'hobbies' },
-                { label: 'About', path: 'about' },
-                { label: 'Contact', path: 'contact' }
-              ].map((item) => (
-                <button
+          <motion.h1 
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-7xl md:text-[12rem] font-black leading-[0.8] tracking-tighter uppercase italic text-white"
+          >
+            ABBAS <br />
+            <span className="text-outline-white text-transparent">STUDIO</span>
+          </motion.h1>
+
+          <div className="mt-12 flex flex-wrap gap-4">
+            <AnimatePresence>
+              {isBooted && navItems.map((item, i) => (
+                <motion.button
                   key={item.path}
-                  onClick={() => handleNavigation(item.path)}
-                  className="ops-button text-sm hover:neon-glow transition-all duration-300"
-                  disabled={!animationComplete}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => navigate(`/${item.path}`)}
+                  className="group relative border border-white/20 px-8 py-3 bg-white/5 backdrop-blur-sm overflow-hidden"
                 >
-                  {item.label}
-                </button>
+                  <span className="relative z-10 font-mono text-[10px] tracking-[0.3em] text-white group-hover:text-black transition-colors">
+                    {item.label}
+                  </span>
+                  <motion.div 
+                    className="absolute inset-0 bg-accent -translate-x-full group-hover:translate-x-0 transition-transform duration-300"
+                  />
+                </motion.button>
               ))}
-            </div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
+
+      <button 
+        onClick={onComplete}
+        className="absolute bottom-10 right-10 font-mono text-[10px] text-white/30 hover:text-accent tracking-widest transition-colors uppercase"
+      >
+        Skip_Sequence // ESC
+      </button>
     </div>
   );
 };
