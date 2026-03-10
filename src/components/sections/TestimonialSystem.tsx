@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Send, Star, Terminal, ChevronRight, MessageSquareQuote, CheckCircle2 } from 'lucide-react';
+import { Send, Star, Terminal, ChevronRight, MessageSquareQuote, CheckCircle2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/supabaseClient'; // Ensure this path is correct
 
 const containerVars: Variants = {
   hidden: { opacity: 0 },
@@ -17,33 +19,86 @@ const itemVars: Variants = {
   }
 };
 
-const INITIAL_TESTIMONIALS = [
-  { id: 1, name: 'Sarah Johnson', company: 'Tech Solutions Inc.', message: 'Abbas delivered an exceptional e-commerce platform. His technical expertise is outstanding.', rating: 5 },
-  { id: 2, name: 'Michael Chen', company: 'Digital Innovations', message: 'High-quality, maintainable code and clear communication throughout the project.', rating: 4 },
-  { id: 3, name: 'Elena Rodriguez', company: 'Nexus Stream', message: 'The attention to detail in the UI/UX implementation exceeded our expectations.', rating: 5 }
-];
-
 const TestimonialSystem = () => {
-  const [testimonials, setTestimonials] = useState(INITIAL_TESTIMONIALS);
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [form, setForm] = useState({ name: '', company: '', message: '', rating: 5 });
   const [hoverRating, setHoverRating] = useState(0);
   const [isTransmitting, setIsTransmitting] = useState(false);
-  const [lastSubmittedId, setLastSubmittedId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastSubmittedId, setLastSubmittedId] = useState<string | null>(null);
+
+  // 1. Check Auth & Fetch Existing Data
+  useEffect(() => {
+    const initialize = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        setForm(prev => ({ ...prev, name: session.user.email?.split('@')[0] || '' }));
+      }
+      fetchTestimonials();
+    };
+
+    initialize();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast.error("DATABASE_ERROR: Could not sync logs.");
+    } else {
+      setTestimonials(data || []);
+    }
+    setIsLoading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return navigate('/auth');
+
     setIsTransmitting(true);
-    setTimeout(() => {
-      const newEntry = { ...form, id: Date.now() };
-      setTestimonials(prev => [newEntry, ...prev]);
-      setLastSubmittedId(newEntry.id);
-      setIsTransmitting(false);
-      toast.success('DATA_LOGGED: Transmission successful.');
-      setForm({ name: '', company: '', message: '', rating: 5 });
-    }, 1500);
+
+    const { data, error } = await supabase
+      .from('testimonials')
+      .insert([
+        { 
+          name: form.name, 
+          company: form.company, 
+          message: form.message, 
+          rating: form.rating,
+          user_id: user.id 
+        }
+      ])
+      .select();
+
+    if (error) {
+      toast.error(`TRANSMISSION_FAILED: ${error.message}`);
+    } else {
+      toast.success('DATA_LOGGED: Entry encrypted and stored.');
+      setTestimonials(prev => [data[0], ...prev]);
+      setLastSubmittedId(data[0].id);
+      setForm({ name: user.email?.split('@')[0] || '', company: '', message: '', rating: 5 });
+    }
+    setIsTransmitting(false);
   };
 
-  const marqueeItems = useMemo(() => [...testimonials, ...testimonials, ...testimonials], [testimonials]);
+  const marqueeItems = useMemo(() => {
+    if (testimonials.length === 0) return [];
+    // Ensure we have enough items to scroll smoothly
+    return [...testimonials, ...testimonials, ...testimonials];
+  }, [testimonials]);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={containerVars} className="space-y-16 antialiased">
@@ -58,6 +113,24 @@ const TestimonialSystem = () => {
       {/* --- FORM SECTION --- */}
       <motion.div variants={itemVars} className="relative">
         <div className={`relative bg-zinc-950 border transition-all duration-300 p-8 rounded-[1.5rem] ${isTransmitting ? 'border-accent shadow-[0_0_20px_rgba(0,255,171,0.15)]' : 'border-white/10'}`}>
+          
+          {/* GUEST OVERLAY */}
+          {!user && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-[6px] rounded-[1.5rem] border border-white/5 p-6 text-center">
+              <div className="p-4 bg-accent/10 rounded-full mb-4">
+                <Lock className="text-accent" size={32} />
+              </div>
+              <h3 className="text-white font-mono text-[11px] tracking-[0.3em] uppercase mb-2">Access_Denied</h3>
+              <p className="text-zinc-500 text-[10px] font-mono mb-6 max-w-[200px]">UPLINK REQUIRES VALID BIOMETRIC SIGNATURE</p>
+              <button 
+                onClick={() => navigate('/auth')}
+                className="px-8 py-3 bg-accent text-black font-black text-[10px] tracking-widest uppercase hover:brightness-110 active:scale-95 transition-all rounded-lg"
+              >
+                Initialize_Auth
+              </button>
+            </div>
+          )}
+
           <AnimatePresence>
             {isTransmitting && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 overflow-hidden pointer-events-none rounded-[1.5rem] z-50">
@@ -72,7 +145,7 @@ const TestimonialSystem = () => {
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className={`space-y-10 relative z-10 transition-all duration-300 ${isTransmitting ? 'opacity-30 grayscale' : 'opacity-100'}`}>
+          <form onSubmit={handleSubmit} className={`space-y-10 relative z-10 transition-all duration-300 ${isTransmitting || !user ? 'opacity-20 grayscale' : 'opacity-100'}`}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="relative">
                 <input 
@@ -117,7 +190,7 @@ const TestimonialSystem = () => {
                   ))}
                 </div>
               </div>
-              <button type="submit" disabled={isTransmitting} className="w-full sm:w-auto px-10 py-4 bg-accent text-black font-bold uppercase tracking-[0.2em] rounded-lg text-[11px] flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_0_rgb(0,200,130)]">
+              <button type="submit" disabled={isTransmitting || !user} className="w-full sm:w-auto px-10 py-4 bg-accent text-black font-bold uppercase tracking-[0.2em] rounded-lg text-[11px] flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_0_rgb(0,200,130)] disabled:opacity-50">
                 {isTransmitting ? 'ENCRYPTING...' : 'EXECUTE_LOG'} <Send size={12} />
               </button>
             </div>
@@ -132,25 +205,31 @@ const TestimonialSystem = () => {
           <div className="h-[1px] flex-grow bg-white/10" />
         </div>
 
-        <div className="relative flex overflow-hidden py-4">
-          <motion.div 
-            className="flex gap-6 will-change-transform" 
-            animate={{ x: ["0%", "-33.33%"] }} 
-            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-          >
-            {marqueeItems.map((t, idx) => (
-              <div key={`${t.id}-${idx}`} className="w-[320px] md:w-[420px] shrink-0">
-                <ReviewCard t={t} lastSubmittedId={lastSubmittedId} />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-20 font-mono text-[10px] text-accent animate-pulse">SYNCING_DATA_CORES...</div>
+        ) : marqueeItems.length > 0 ? (
+          <div className="relative flex overflow-hidden py-4">
+            <motion.div 
+              className="flex gap-6 will-change-transform" 
+              animate={{ x: ["0%", "-33.33%"] }} 
+              transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+            >
+              {marqueeItems.map((t, idx) => (
+                <div key={`${t.id}-${idx}`} className="w-[320px] md:w-[420px] shrink-0">
+                  <ReviewCard t={t} lastSubmittedId={lastSubmittedId} />
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        ) : (
+          <div className="text-center py-20 font-mono text-[10px] text-zinc-600">NO_DATA_FOUND_IN_SECTOR</div>
+        )}
       </div>
     </motion.div>
   );
 };
 
-const ReviewCard = ({ t, lastSubmittedId }: { t: any, lastSubmittedId: number | null }) => (
+const ReviewCard = ({ t, lastSubmittedId }: { t: any, lastSubmittedId: string | null }) => (
   <div className={`group relative bg-zinc-900/40 border p-8 rounded-[2rem] transition-all duration-500 h-full flex flex-col overflow-hidden
     ${t.id === lastSubmittedId 
       ? 'border-accent bg-accent/[0.03] shadow-[0_0_25px_rgba(0,255,171,0.1)]' 
