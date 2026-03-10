@@ -11,6 +11,7 @@ import HobbiesSection from "./components/sections/HobbiesSection";
 import AboutSection from "./components/sections/AboutSection";
 import ContactSection from "./components/sections/ContactSection";
 import SupabaseTest from "./pages/SupabaseTest"; // We will create this next
+import AuthPage from "./pages/Auth";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,6 +30,8 @@ const App = () => (
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/test-db" element={<SupabaseTest />} /> {/* NEW ROUTE */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            // Inside your Routes
+<Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
