@@ -9,8 +9,12 @@ const containerVars: Variants = {
 };
 
 const itemVars: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
+  hidden: { y: 15, opacity: 0 },
+  visible: { 
+    y: 0, 
+    opacity: 1, 
+    transition: { type: "spring", stiffness: 120, damping: 20 } 
+  }
 };
 
 const INITIAL_TESTIMONIALS = [
@@ -42,56 +46,52 @@ const TestimonialSystem = () => {
   const marqueeItems = useMemo(() => [...testimonials, ...testimonials, ...testimonials], [testimonials]);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={containerVars} className="space-y-16">
+    <motion.div initial="hidden" animate="visible" variants={containerVars} className="space-y-16 antialiased">
       <style>{`
-        @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+        @keyframes scan { 
+          0% { transform: translateY(-100%); opacity: 0; } 
+          50% { opacity: 1; }
+          100% { transform: translateY(1000%); opacity: 0; } 
+        }
       `}</style>
 
       {/* --- FORM SECTION --- */}
       <motion.div variants={itemVars} className="relative">
-        <div className={`relative bg-zinc-950 border transition-all duration-500 p-8 rounded-[2rem] ${isTransmitting ? 'border-accent shadow-[0_0_40px_rgba(0,255,171,0.1)]' : 'border-white/5'}`}>
+        <div className={`relative bg-zinc-950 border transition-all duration-300 p-8 rounded-[1.5rem] ${isTransmitting ? 'border-accent shadow-[0_0_20px_rgba(0,255,171,0.15)]' : 'border-white/10'}`}>
           <AnimatePresence>
             {isTransmitting && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 overflow-hidden pointer-events-none rounded-[2rem] z-50">
-                <div className="absolute w-full h-1 bg-accent shadow-[0_0_20px_#00FFAB]" style={{ animation: 'scan 2s linear infinite' }} />
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 overflow-hidden pointer-events-none rounded-[1.5rem] z-50">
+                <div className="absolute w-full h-[2px] bg-accent shadow-[0_0_10px_#00FFAB]" style={{ animation: 'scan 2s linear infinite' }} />
               </motion.div>
             )}
           </AnimatePresence>
 
           <div className="mb-8">
-            <h2 className="text-2xl font-bold tracking-tighter uppercase italic flex items-center gap-3">
-              Submit Intel <Terminal size={16} className="text-accent" />
+            <h2 className="text-xl font-bold tracking-tight uppercase italic flex items-center gap-3 text-white">
+              Submit Intel <Terminal size={14} className="text-accent" />
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className={`space-y-10 relative z-10 ${isTransmitting ? 'opacity-20 blur-sm' : 'opacity-100'}`}>
+          <form onSubmit={handleSubmit} className={`space-y-10 relative z-10 transition-all duration-300 ${isTransmitting ? 'opacity-30 grayscale' : 'opacity-100'}`}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Identify_User Input */}
               <div className="relative">
                 <input 
                   type="text" required placeholder=" "
-                  className="peer w-full bg-transparent border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors text-xs" 
+                  className="peer w-full bg-transparent border-b border-white/20 py-2 focus:outline-none focus:border-accent transition-colors text-[13px] text-white" 
                   value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} 
                 />
-                <label className="absolute left-0 top-2 text-zinc-600 text-[8px] font-mono uppercase tracking-widest transition-all 
-                  peer-placeholder-shown:top-2 peer-placeholder-shown:text-zinc-600 
-                  peer-focus:-top-4 peer-focus:text-accent 
-                  peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
+                <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
                   Identify_User
                 </label>
               </div>
 
-              {/* Entity_ID Input */}
               <div className="relative">
                 <input 
                   type="text" required placeholder=" "
-                  className="peer w-full bg-transparent border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors text-xs" 
+                  className="peer w-full bg-transparent border-b border-white/20 py-2 focus:outline-none focus:border-accent transition-colors text-[13px] text-white" 
                   value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} 
                 />
-                <label className="absolute left-0 top-2 text-zinc-600 text-[8px] font-mono uppercase tracking-widest transition-all 
-                  peer-placeholder-shown:top-2 peer-placeholder-shown:text-zinc-600 
-                  peer-focus:-top-4 peer-focus:text-accent 
-                  peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
+                <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
                   Entity_ID
                 </label>
               </div>
@@ -100,28 +100,25 @@ const TestimonialSystem = () => {
             <div className="relative">
               <textarea 
                 required rows={2} placeholder=" "
-                className="peer w-full bg-transparent border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors text-xs resize-none" 
+                className="peer w-full bg-transparent border-b border-white/20 py-2 focus:outline-none focus:border-accent transition-colors text-[13px] text-white resize-none" 
                 value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} 
               />
-              <label className="absolute left-0 top-2 text-zinc-600 text-[8px] font-mono uppercase tracking-widest transition-all 
-                peer-placeholder-shown:top-2 peer-placeholder-shown:text-zinc-600 
-                peer-focus:-top-4 peer-focus:text-accent 
-                peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
+              <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
                 Transmission_Data
               </label>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
-              <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5">
-                <span className="text-[8px] font-mono text-zinc-500 uppercase">Rank:</span>
-                <div className="flex gap-1">
+              <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                <span className="text-[9px] font-mono text-zinc-400 uppercase">Rank:</span>
+                <div className="flex gap-1.5">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} size={12} onClick={() => setForm({ ...form, rating: s })} onMouseEnter={() => setHoverRating(s)} onMouseLeave={() => setHoverRating(0)} className={`cursor-pointer transition-all ${s <= (hoverRating || form.rating) ? 'fill-accent text-accent scale-110' : 'text-white/10'}`} />
+                    <Star key={s} size={14} onClick={() => setForm({ ...form, rating: s })} onMouseEnter={() => setHoverRating(s)} onMouseLeave={() => setHoverRating(0)} className={`cursor-pointer transition-transform active:scale-90 ${s <= (hoverRating || form.rating) ? 'fill-accent text-accent' : 'text-white/20'}`} />
                   ))}
                 </div>
               </div>
-              <button type="submit" disabled={isTransmitting} className="w-full sm:w-auto px-10 py-4 bg-accent text-black font-black uppercase tracking-widest rounded-xl text-[10px] flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(0,255,171,0.4)] transition-all">
-                {isTransmitting ? 'ENCRYPTING...' : 'EXECUTE_LOG'} <Send size={10} />
+              <button type="submit" disabled={isTransmitting} className="w-full sm:w-auto px-10 py-4 bg-accent text-black font-bold uppercase tracking-[0.2em] rounded-lg text-[11px] flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_0_rgb(0,200,130)]">
+                {isTransmitting ? 'ENCRYPTING...' : 'EXECUTE_LOG'} <Send size={12} />
               </button>
             </div>
           </form>
@@ -131,14 +128,18 @@ const TestimonialSystem = () => {
       {/* --- LOGS FEED --- */}
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-500">Decrypted_Logs</h3>
-          <div className="h-[1px] flex-grow bg-white/5" />
+          <h3 className="text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-500">Decrypted_Logs</h3>
+          <div className="h-[1px] flex-grow bg-white/10" />
         </div>
 
-        <div className="relative flex overflow-hidden group py-4">
-          <motion.div className="flex gap-6" animate={{ x: ["0%", "-33.33%"] }} transition={{ duration: 30, ease: "linear", repeat: Infinity }} whileHover={{ transition: { duration: 60 } }}>
+        <div className="relative flex overflow-hidden py-4">
+          <motion.div 
+            className="flex gap-6 will-change-transform" 
+            animate={{ x: ["0%", "-33.33%"] }} 
+            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+          >
             {marqueeItems.map((t, idx) => (
-              <div key={`${t.id}-${idx}`} className="w-[320px] md:w-[400px] shrink-0">
+              <div key={`${t.id}-${idx}`} className="w-[320px] md:w-[420px] shrink-0">
                 <ReviewCard t={t} lastSubmittedId={lastSubmittedId} />
               </div>
             ))}
@@ -150,41 +151,43 @@ const TestimonialSystem = () => {
 };
 
 const ReviewCard = ({ t, lastSubmittedId }: { t: any, lastSubmittedId: number | null }) => (
-  <div className={`group relative bg-zinc-900/40 border p-8 rounded-3xl transition-all duration-500 h-full flex flex-col 
+  <div className={`group relative bg-zinc-900/40 border p-8 rounded-[2rem] transition-all duration-500 h-full flex flex-col overflow-hidden
     ${t.id === lastSubmittedId 
-      ? 'border-accent bg-accent/5 shadow-[0_0_30px_rgba(0,255,171,0.1)]' 
-      : 'border-white/5 hover:border-accent/40 hover:bg-accent/[0.02] hover:shadow-[0_0_30px_rgba(0,255,171,0.05)]'}`}>
+      ? 'border-accent bg-accent/[0.03] shadow-[0_0_25px_rgba(0,255,171,0.1)]' 
+      : 'border-white/10 hover:border-white/30 hover:bg-zinc-900/60'}`}>
     
     {t.id === lastSubmittedId && (
-      <div className="absolute -top-3 left-6 flex items-center gap-2 px-3 py-1 bg-accent rounded-full z-20 shadow-[0_0_15px_#00FFAB]">
-        <CheckCircle2 size={10} className="text-black" />
-        <span className="text-[8px] font-black text-black uppercase">Verified</span>
+      <div className="absolute top-0 right-0">
+        <div className="bg-accent text-black px-4 py-1.5 rounded-bl-2xl flex items-center gap-2 shadow-sm">
+          <CheckCircle2 size={10} strokeWidth={3} />
+          <span className="text-[9px] font-black uppercase tracking-tighter">Verified_Entry</span>
+        </div>
       </div>
     )}
 
-    <div className="flex gap-1.5 mb-6">
+    <div className="flex gap-2 mb-6">
       {[...Array(5)].map((_, idx) => (
         <div key={idx} className={`w-1.5 h-1.5 rounded-full transition-all duration-500 
-          ${idx < t.rating ? 'bg-accent shadow-[0_0_8px_#00FFAB]' : 'bg-zinc-800'}`} />
+          ${idx < t.rating ? 'bg-accent shadow-[0_0_5px_#00FFAB]' : 'bg-zinc-800'}`} />
       ))}
     </div>
 
     <div className="relative flex-grow">
-      <MessageSquareQuote size={32} className="absolute -top-4 -left-2 text-white/5 group-hover:text-accent/10 transition-colors" />
-      <p className="text-zinc-400 text-[13px] leading-relaxed mb-8 relative z-10 font-light italic group-hover:text-zinc-200 transition-colors">
-        "{t.message}"
+      <MessageSquareQuote size={28} className="absolute -top-2 -left-2 text-white/5" />
+      <p className="text-zinc-300 text-[14px] leading-[1.6] mb-8 relative z-10 font-medium">
+        {t.message}
       </p>
     </div>
 
     <div className="flex items-center gap-4 mt-auto pt-6 border-t border-white/5">
-      <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent font-mono text-xs shrink-0 group-hover:border-accent/30 transition-all">
+      <div className="h-10 w-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent font-mono text-xs font-bold shrink-0">
         {t.name.charAt(0)}
       </div>
       <div className="min-w-0">
-        <h4 className="text-[11px] font-bold uppercase text-white tracking-wider flex items-center gap-2 group-hover:text-accent transition-colors">
-          {t.name} <ChevronRight size={10} className="opacity-0 group-hover:opacity-100 transition-all" />
+        <h4 className="text-[12px] font-bold uppercase text-white tracking-wide flex items-center gap-2">
+          {t.name} <ChevronRight size={10} className="text-accent" />
         </h4>
-        <p className="text-[9px] font-mono text-zinc-600 uppercase truncate">
+        <p className="text-[10px] font-mono text-zinc-500 uppercase truncate">
           {t.company}
         </p>
       </div>
