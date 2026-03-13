@@ -8,7 +8,7 @@ import Layout from '@/components/Layout';
 const PAGE_CONTENT = {
   name: { first: "Syed", last: "Abbas" },
   role: "Full-Stack Developer",
-  specialization: "MERN stack architecture and aggressive UI/UX",
+  specialization: "Next.js, MERN architecture and aggressive UI/UX",
   navigation: [
     { label: 'Selected_Projects', path: 'projects', count: '04' },
     { label: 'Technical_Background', path: 'education', count: '02' },
@@ -106,7 +106,7 @@ const Index = () => {
                 className="group flex items-end gap-4 cursor-pointer border-b border-white/5 pb-4 hover:border-accent transition-colors duration-500"
               >
                 <span className="text-accent font-mono text-xs mb-2">{item.count}</span>
-                <span className="text-4xl md:text-6xl font-bold uppercase tracking-tighter group-hover:italic group-hover:translate-x-4 transition-all duration-500">
+                <span className="text-4xl md:text-6xl font-bold uppercase tracking-tighter group-hover:translate-x-4 transition-all duration-500">
                   {item.label}
                 </span>
                 <span className="ml-auto text-muted-foreground group-hover:text-accent group-hover:translate-x-2 transition-all">→</span>

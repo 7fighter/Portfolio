@@ -56,7 +56,7 @@ const HeroSection = ({ onComplete }: HeroSectionProps) => {
 
     tl.fromTo(imageRef.current, 
       { scale: 1.5, filter: 'brightness(2) contrast(2)' },
-      { scale: 1, filter: 'brightness(0.4) contrast(1.1)', duration: 1, ease: "expo.out" }
+      { scale: 1, filter: 'brightness(0.4) contrast(1.1)', duration: 1.5, ease: "expo.out" }
     );
 
     setTimeout(() => scramble("DECRYPTING_BIO"), 300);

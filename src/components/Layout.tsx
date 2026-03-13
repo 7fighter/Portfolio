@@ -106,7 +106,7 @@ const Layout = ({ children }: LayoutProps) => {
           <Hexagon size={32} className="text-accent relative z-10 animate-[spin_10s_linear_infinite]" fill="currentColor" fillOpacity={0.1} />
         </Link>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;

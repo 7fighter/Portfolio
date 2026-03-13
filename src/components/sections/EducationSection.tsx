@@ -6,28 +6,28 @@ const EducationSection = () => {
   const education = [
     {
       degree: 'Bachelor of Science in Computer Science',
-      institution: 'University of Technology',
-      location: 'Lahore, Pakistan',
-      period: '2019 - 2023',
+      institution: 'Comsats University Isalamabad',
+      location: 'Attock, Pakistan',
+      period: '2024 - 2028',
       grade: 'CGPA: 3.8/4.0',
       description: 'The era of architecture. Specialized in Software Engineering and Database Systems. This phase defined my core logic and problem-solving framework.',
       tags: ['Software Engineering', 'Databases', 'Logic']
     },
     {
       degree: 'Intermediate in Computer Science',
-      institution: 'Government College',
-      location: 'Lahore, Pakistan',
-      period: '2017 - 2019',
+      institution: 'Federal College Of Science & Commerce',
+      location: 'Attock, Pakistan',
+      period: '2019 - 2021',
       grade: 'Marks: 85%',
       description: 'The foundation of code. Transitioned from theory to practical implementation, focusing on mathematics and physics fundamentals.',
       tags: ['Mathematics', 'Physics', 'Fundamentals']
     },
     {
       degree: 'Matriculation in Science',
-      institution: 'Al-Huda School',
-      location: 'Lahore, Pakistan',
-      period: '2015 - 2017',
-      grade: 'Marks: 92%',
+      institution: 'Jinnah Public School',
+      location: 'Attock, Pakistan',
+      period: '2017 - 2019',
+      grade: 'Marks: 85%',
       description: 'The spark of curiosity. Strong foundation in sciences and academic excellence that paved the way for a technical future.',
       tags: ['Science', 'Academic Excellence']
     }

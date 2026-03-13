@@ -1,5 +1,5 @@
 import { motion, Variants } from 'framer-motion';
-import { Copy, ExternalLink, Github, Terminal, Layers, Globe } from 'lucide-react';
+import { Copy, Github, Terminal, Layers, Globe } from 'lucide-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { toast } from 'sonner';
 import Layout from '@/components/Layout';
@@ -9,87 +9,99 @@ const ProjectsSection = () => {
     {
       title: 'Digital Campus System',
       id: 'PRJ-001',
-      description: 'Full-stack academic infrastructure with integrated secure payment gateways and student management.',
-      techStack: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
-      githubUrl: 'https://github.com/syedabbas/digital-campus',
-      liveUrl: 'https://ecommerce-demo.com'
+      description: 'Full-stack academic infrastructure withtask synchronization using Convex for zero-latency collaboration and student management.',
+      techStack: ['Next.js', 'Clerk', 'Convex', 'Stripe'],
+      githubUrl: 'https://github.com/7fighter/apna-campus',
+      liveUrl: 'https://apna-campus-bofk.vercel.app/'
     },
     {
-      title: 'Real-time Collab Lab',
+      title: 'Real-time Dentist Lab',
       id: 'PRJ-002',
-      description: 'Industrial-grade task synchronization engine using WebSockets for zero-latency collaboration.',
-      techStack: ['React', 'Socket.io', 'PostgreSQL', 'Redis'],
-      githubUrl: 'https://github.com/syedabbas/task-manager',
-      liveUrl: 'https://taskmanager-demo.com'
+      description: 'Industrial-grade Dentist website integrated secure payment gateways and Better auth for authenticated access.',
+      techStack: ['React', 'Better Auth', 'Supabase', 'Stripe'],
+      githubUrl: 'https://github.com/7fighter/dentist-web-App',
+      liveUrl: 'https://sb-ka-dentist.netlify.app/'
     },
     {
-      title: 'Weather Analytics Hub',
+      title: 'Habit Flow',
       id: 'PRJ-003',
-      description: 'Advanced data visualization engine processing real-time meteorological API data with D3 rendering.',
-      techStack: ['React', 'D3.js', 'Express', 'Redis'],
-      githubUrl: 'https://github.com/syedabbas/weather-dashboard',
-      liveUrl: 'https://weather-analytics.com'
+      description: 'Build in collaboration wiht the team include Advanced data visualization',
+      techStack: ['TypeScript', 'Vite', 'Framer Motion', 'Framer motion'],
+      githubUrl: 'https://github.com/maaz-n/flowbit',
+      liveUrl: 'https://flowbit-three.vercel.app/'
     }
   ];
 
+  // Snappier container: Reduced stagger for faster reveal
   const containerVars: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1, 
-      transition: { staggerChildren: 0.2, delayChildren: 0.1 } 
+      transition: { 
+        staggerChildren: 0.08, 
+        delayChildren: 0.05 
+      } 
     }
   };
 
+  // Snappier items: Using spring physics instead of duration-based eases
   const itemVars: Variants = {
-    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    hidden: { opacity: 0, y: 15, scale: 0.98 },
     visible: { 
       opacity: 1, 
-      scale: 1, 
       y: 0, 
-      transition: { duration: 0.5, ease: "easeOut" as const } 
+      scale: 1,
+      transition: { 
+        type: "spring", 
+        stiffness: 300, 
+        damping: 30,
+        mass: 0.8
+      } 
     }
   };
 
   const handleCopyGithub = () => {
-    toast.success('DATA_LINKED: GitHub URL copied to clipboard');
+    toast.success('DATA_LINKED: GitHub URL copied');
   };
 
   return (
     <Layout>
       <motion.div 
         initial="hidden"
-        animate="visible"
+        whileInView="visible" // Only animates when in viewport for better performance
+        viewport={{ once: true, margin: "-100px" }}
         variants={containerVars}
-        className="max-w-6xl mx-auto pb-24"
+        className="max-w-6xl mx-auto pb-24 px-6 md:px-12"
       >
         {/* --- HEADER --- */}
         <motion.div variants={itemVars} className="mb-16 pt-10">
-          <div className="flex items-center gap-3 text-accent font-mono text-xs tracking-[0.5em] mb-4">
+          <div className="flex items-center gap-3 text-accent font-mono text-[10px] tracking-[0.5em] mb-4 opacity-80">
             <Terminal size={14} /> // DEPLOYMENT_ARCHIVE
           </div>
-          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
+          <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
             SELECTED <br />
-            <span className="text-outline-white text-white/10 italic">WORKS</span>
+            <span className="text-outline-white text-white/5 italic">WORKS</span>
           </h1>
         </motion.div>
 
         {/* --- PROJECT GRID --- */}
-        <div className="grid grid-cols-1 gap-12">
-          {projects.map((project, index) => (
+        <div className="grid grid-cols-1 gap-6">
+          {projects.map((project) => (
             <motion.div
-              key={index}
+              key={project.id}
               variants={itemVars}
-              whileHover={{ x: 10 }}
-              className="relative group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:bg-white/[0.04] transition-all duration-500"
+              whileHover={{ x: 8 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:bg-white/[0.04] hover:border-white/10 transition-colors duration-200"
             >
               {/* ID Badge */}
-              <div className="absolute top-8 right-8 font-mono text-[10px] text-muted-foreground opacity-50 group-hover:text-accent group-hover:opacity-100">
+              <div className="absolute top-8 right-8 font-mono text-[10px] text-muted-foreground opacity-30 group-hover:text-accent group-hover:opacity-100 transition-all">
                 {project.id}
               </div>
 
               {/* LEFT: Project Info */}
               <div className="lg:col-span-7 space-y-6">
-                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight group-hover:text-accent transition-colors">
+                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight group-hover:text-accent transition-colors duration-200">
                   {project.title}
                 </h3>
                 
@@ -101,7 +113,7 @@ const ProjectsSection = () => {
                   {project.techStack.map((tech) => (
                     <span 
                       key={tech} 
-                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono tracking-widest text-accent/80"
+                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono tracking-widest text-accent/80 hover:bg-accent/10 transition-colors"
                     >
                       {tech}
                     </span>
@@ -114,7 +126,8 @@ const ProjectsSection = () => {
                 <a
                   href={project.liveUrl}
                   target="_blank"
-                  className="flex items-center justify-between p-4 bg-accent text-black font-bold uppercase text-sm rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-accent text-black font-bold uppercase text-sm rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(139,92,246,0.1)] hover:shadow-[0_0_25px_rgba(139,92,246,0.3)]"
                 >
                   Launch Live Demo <Globe size={18} />
                 </a>
@@ -123,21 +136,22 @@ const ProjectsSection = () => {
                   <a
                     href={project.githubUrl}
                     target="_blank"
-                    className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-mono"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all text-xs font-mono"
                   >
                     <Github size={16} /> REPO
                   </a>
                   
                   <CopyToClipboard text={project.githubUrl} onCopy={handleCopyGithub}>
-                    <button className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-mono">
+                    <button className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all text-xs font-mono">
                       <Copy size={16} /> COPY_LINK
                     </button>
                   </CopyToClipboard>
                 </div>
               </div>
 
-              {/* Decorative Accent Line */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 group-hover:h-2/3 bg-accent transition-all duration-500 rounded-r-full" />
+              {/* Decorative Accent Line - Faster transition */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 group-hover:h-1/2 bg-accent transition-all duration-300 ease-out rounded-r-full" />
             </motion.div>
           ))}
         </div>
@@ -145,10 +159,10 @@ const ProjectsSection = () => {
         {/* --- DYNAMIC FOOTER --- */}
         <motion.div variants={itemVars} className="mt-20 flex flex-col items-center justify-center space-y-4">
             <div className="h-px w-24 bg-white/10" />
-            <p className="text-muted-foreground font-mono text-[10px] tracking-[0.5em] uppercase">
+            <p className="text-muted-foreground font-mono text-[10px] tracking-[0.5em] uppercase opacity-50">
               End_of_Archive
             </p>
-            <Layers className="text-accent/20" size={40} />
+            <Layers className="text-accent/10" size={40} />
         </motion.div>
       </motion.div>
     </Layout>
