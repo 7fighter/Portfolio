@@ -1,73 +1,116 @@
-# Welcome to your Lovable project
+# Cyberpunk Portfolio - Syed Abbas
 
-## Project info
+![Portfolio Hero](src/assets/hero-hacker.jpg)
+<!-- ![Portfolio Hero](public/ReameImges/landingPage.png) -->
 
-**URL**: https://lovable.dev/projects/e3af7e6f-dd53-4c88-820b-6a3bde9df698
+> A futuristic full-stack developer portfolio with immersive UI, animated interactions, and integrated Supabase authentication.
 
-## How can I edit this code?
+This project is a personal portfolio application built with React, TypeScript, and Vite. It features a cinematic cyberpunk interface, route-based content sections, and a Supabase-powered auth page for secure sign-in.
 
-There are several ways of editing your application.
+Visit website at:
 
-**Use Lovable**
+```link
+Add your deployed URL here
+```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e3af7e6f-dd53-4c88-820b-6a3bde9df698) and start prompting.
+## Key Features
 
-Changes made via Lovable will be committed automatically to this repo.
+- Cyberpunk visual system with animated side navigation, system-status HUD, and ambient effects.
+- Intro flow with first-visit logic and transition into the main interface.
+- Dedicated route sections for Projects, Education, Hobbies, About, and Contact.
+- Project archive with live demo links, GitHub links, and one-click copy actions.
+- Supabase authentication page with provider login (Google and GitHub).
+- Responsive layout built with Tailwind CSS and reusable shadcn-ui components.
+- Motion-first UX using Framer Motion and GSAP transitions.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## UI Showcase
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+<table>
+	<tr>
+		<th width="50%">Main Visual</th>
+		<th width="50%">Sections Preview</th>
+	</tr>
+	<tr>
+		<td valign="top">
+			<img src="public/ReameImges/contact.png" alt="Portfolio Hero" />
+			<p align="center"><em>Contact & Review</em></p>
+		</td>
+		<td>
+			<img src="public/ReameImges/landingPage.png" alt="Identity" />
+			<p align="center"><em>Landing experience with cinematic identity reveal</em></p>
+			<img src="public/ReameImges/Home.png" alt="Hobbies" />
+			<p align="center"><em>Section-driven storytelling</em></p>
+			<!-- <img src="src/assets/wrench.jpg" alt="Projects and tools" /> -->
+			<!-- <p align="center"><em>Project and tooling perspective</em></p> -->
+		</td>
+	</tr>
+</table>
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Tech Stack
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+<!-- - Framework: [React 18](https://react.dev/) -->
+- Build Tool: [Vite](https://vitejs.dev/)
+- Language: [TypeScript](https://www.typescriptlang.org/)
+- Styling: [Tailwind CSS](https://tailwindcss.com/)
+- UI Components: [shadcn-ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
+- Routing: [React Router](https://reactrouter.com/)
+<!-- - Data Fetching: [TanStack Query](https://tanstack.com/query/latest) -->
+- Auth + Backend Services: [Supabase](https://supabase.com/)
+- Animations: [Framer Motion](https://www.framer.com/motion/) + [GSAP](https://gsap.com/)
+- Icons: [Lucide React](https://lucide.dev/)
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Getting Started
+
+Install dependencies and run the development server:
+
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Other available scripts:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run build
+npm run build:dev
+npm run preview
+npm run lint
+```
 
-**Use GitHub Codespaces**
+The app runs by default on:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```link
+http://localhost:5173
+```
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Create a `.env` file in the project root and add:
 
-## How can I deploy this project?
+```bash
+VITE_SUPABASE_URL=https://aodxp
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_BWY
 
-Simply open [Lovable](https://lovable.dev/projects/e3af7e6f-dd53-4c88-820b-6a3bde9df698) and click on Share -> Publish.
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1N
 
-## Can I connect a custom domain to my Lovable project?
+```
 
-Yes, you can!
+These values are required for the auth flow and Supabase client initialization.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Project Structure (High Level)
+
+- `src/pages`: Route entry pages (`Index`, `Auth`, `NotFound`)
+- `src/components/sections`: Main portfolio content sections
+- `src/components/ui`: Reusable UI primitives
+- `src/assets`: Portfolio image assets used by sections 
+- `src/supabaseClient.ts`: Supabase client setup via Vite env variables
