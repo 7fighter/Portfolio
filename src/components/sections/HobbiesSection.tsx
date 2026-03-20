@@ -68,10 +68,12 @@ const HobbiesSection = () => {
           <div className="flex items-center gap-3 text-accent font-mono text-[10px] tracking-[0.5em] mb-4 opacity-70">
             <Sparkles size={14} /> // OFF_DUTY_MODULE
           </div>
-          <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85]">
-            EXTRASENSORY <br />
-            <span className="text-outline-white text-white/5 italic">INTERESTS</span>
-          </h1>
+        <h1 className="text-[11vw] md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] break-words">
+  EXTRASENSORY <br />
+  <span className="text-outline-white text-white/5 italic">
+    INTERESTS
+  </span>
+</h1>
         </motion.div>
 
         {/* --- HOBBIES GRID --- */}

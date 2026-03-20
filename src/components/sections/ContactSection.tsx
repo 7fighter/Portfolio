@@ -15,9 +15,9 @@ const itemVars: Variants = {
 
 const ContactSection = () => {
   const contactInfo = [
-    { icon: Mail, label: 'PROTOCOL: EMAIL', value: 'abbas.dev@email.com', href: 'mailto:abbas.dev@email.com' },
-    { icon: Phone, label: 'VOICE: ENCRYPTED', value: '+92 300 1234567', href: 'tel:+923001234567' },
-    { icon: MapPin, label: 'NODE: LOCATION', value: 'Lahore, Pakistan', href: '#' }
+    { icon: Mail, label: 'PROTOCOL: EMAIL', value: 'abbassyed389@gmail.com', href: 'mailto:abbassyed389@gmail.com' },
+    { icon: Phone, label: 'VOICE: ENCRYPTED', value: '+92 309 5027607', href: 'tel:+923095027607' },
+    { icon: MapPin, label: 'NODE: LOCATION', value: 'Attock, Pakistan', href: '#' }
   ];
 
   return (
@@ -52,23 +52,36 @@ const ContactSection = () => {
           
           {/* LEFT: STICKY SIDEBAR */}
           <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-10">
-            <div className="space-y-4">
-              <h3 className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em] px-2 font-bold opacity-60">Access_Nodes</h3>
-              <div className="space-y-3">
-                {contactInfo.map((contact, i) => (
-                  <motion.a key={i} href={contact.href} whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.04)" }}
-                    className="flex items-center gap-5 p-6 border border-white/5 rounded-[2rem] group transition-all bg-zinc-950/40 backdrop-blur-sm">
-                    <div className="p-4 bg-zinc-900 border border-white/10 text-zinc-400 group-hover:text-accent group-hover:border-accent/40 rounded-2xl transition-all">
-                      <contact.icon size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">{contact.label}</p>
-                      <p className="text-lg font-bold text-zinc-200 group-hover:text-white transition-colors tracking-tight">{contact.value}</p>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
-            </div>
+       <div className="space-y-4">
+  <h3 className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em] px-2 font-bold opacity-60">
+    Access_Nodes
+  </h3>
+  <div className="space-y-3">
+    {contactInfo.map((contact, i) => (
+      <motion.a 
+        key={i} 
+        href={contact.href} 
+        whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.04)" }}
+        className="flex items-center gap-4 md:gap-5 p-4 md:p-6 border border-white/5 rounded-[1.5rem] md:rounded-[2rem] group transition-all bg-zinc-950/40 backdrop-blur-sm overflow-hidden"
+      >
+        {/* Prevent icon from shrinking when text gets long */}
+        <div className="flex-shrink-0 p-3 md:p-4 bg-zinc-900 border border-white/10 text-zinc-400 group-hover:text-accent group-hover:border-accent/40 rounded-xl md:rounded-2xl transition-all">
+          <contact.icon size={18} className="md:size-5" />
+        </div>
+
+        {/* min-w-0 allows the flex child to shrink properly */}
+        <div className="min-w-0 flex-1">
+          <p className="text-[9px] md:text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1 truncate">
+            {contact.label}
+          </p>
+          <p className="text-sm sm:text-base md:text-lg font-bold text-zinc-200 group-hover:text-white transition-colors tracking-tight break-all sm:break-normal">
+            {contact.value}
+          </p>
+        </div>
+      </motion.a>
+    ))}
+  </div>
+</div>
 
             {/* LIVE SYSTEM MONITOR DASHBOARD */}
             <div className="p-10 bg-zinc-950/80 border border-white/5 rounded-[3rem] space-y-8 relative overflow-hidden backdrop-blur-md">

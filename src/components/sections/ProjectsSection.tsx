@@ -142,11 +142,18 @@ const ProjectsSection = () => {
                     <Github size={16} /> REPO
                   </a>
                   
-                  <CopyToClipboard text={project.githubUrl} onCopy={handleCopyGithub}>
-                    <button className="flex items-center justify-center gap-2 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all text-xs font-mono">
-                      <Copy size={16} /> COPY_LINK
-                    </button>
-                  </CopyToClipboard>
+                 <CopyToClipboard text={project.githubUrl} onCopy={handleCopyGithub}>
+  <button className="w-full flex items-center justify-center gap-2 p-3 md:p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all text-[10px] md:text-xs font-mono group">
+    {/* flex-shrink-0 ensures the icon stays its intended size */}
+    <Copy size={16} className="flex-shrink-0 group-hover:text-accent transition-colors" /> 
+    
+    {/* whitespace-nowrap prevents the text from wrapping awkwardly, 
+        while truncate handles extreme edge cases */}
+    <span className="whitespace-nowrap truncate">
+      COPY_LINK
+    </span>
+  </button>
+</CopyToClipboard>
                 </div>
               </div>
 

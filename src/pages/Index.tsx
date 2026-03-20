@@ -26,14 +26,14 @@ const Index = () => {
   const navigate = useNavigate();
   const [showHero, setShowHero] = useState(false);
   const [heroComplete, setHeroComplete] = useState(false);
-  
+
   // Real-time Clock for that "System Active" feel
   const [time, setTime] = useState(new Date().toLocaleTimeString());
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
     const hasVisited = localStorage.getItem('portfolio_visited');
-    
+
     if (!hasVisited) {
       setShowHero(true);
       localStorage.setItem('portfolio_visited', 'true');
@@ -53,8 +53,8 @@ const Index = () => {
 
   const itemVariants: Variants = {
     hidden: { y: 40, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
     }
@@ -66,7 +66,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <motion.div 
+      <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -82,34 +82,43 @@ const Index = () => {
               </span>
               SYSTEM_ACTIVE // {time}
             </div>
-            
+
             <h1 className="text-6xl md:text-[120px] font-black leading-[0.85] tracking-tighter uppercase italic">
-              {PAGE_CONTENT.name.first} <br /> 
-             <span className="pr-4 text-transparent bg-clip-text bg-gradient-to-r from-accent via-purple-500 to-blue-500">
-  {PAGE_CONTENT.name.last}
-</span>
+              {PAGE_CONTENT.name.first} <br />
+              <span className="pr-4 text-transparent bg-clip-text bg-gradient-to-r from-accent via-purple-500 to-blue-500">
+                {PAGE_CONTENT.name.last}
+              </span>
             </h1>
           </motion.div>
 
           <motion.div variants={itemVariants} className="max-w-xl">
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
-              {PAGE_CONTENT.role} crafting <span className="text-white font-medium">high-performance</span> digital systems. 
+              {PAGE_CONTENT.role} crafting <span className="text-white font-medium">high-performance</span> digital systems.
               Specialized in {PAGE_CONTENT.specialization}.
             </p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="space-y-4 pt-10">
             {PAGE_CONTENT.navigation.map((item) => (
-              <div 
+              <div
                 key={item.path}
                 onClick={() => navigate(`/${item.path}`)}
-                className="group flex items-end gap-4 cursor-pointer border-b border-white/5 pb-4 hover:border-accent transition-colors duration-500"
+                className="group flex items-start md:items-end gap-3 md:gap-4 cursor-pointer border-b border-white/5 pb-4 hover:border-accent transition-colors duration-500"
               >
-                <span className="text-accent font-mono text-xs mb-2">{item.count}</span>
-                <span className="text-4xl md:text-6xl font-bold uppercase tracking-tighter group-hover:translate-x-4 transition-all duration-500">
-                  {item.label}
+                {/* Count: Smaller on mobile */}
+                <span className="text-accent font-mono text-[10px] md:text-xs mt-2 md:mb-2">
+                  {item.count}
                 </span>
-                <span className="ml-auto text-muted-foreground group-hover:text-accent group-hover:translate-x-2 transition-all">→</span>
+
+                {/* Label: Scaled down for mobile, prevents overflow */}
+                <span className="text-2xl sm:text-3xl md:text-6xl font-bold uppercase tracking-tighter group-hover:translate-x-2 md:group-hover:translate-x-4 transition-all duration-500 break-words leading-tight">
+                  {item.label.replace('_', ' ')}
+                </span>
+
+                {/* Arrow: Stays aligned */}
+                <span className="ml-auto text-muted-foreground group-hover:text-accent group-hover:translate-x-2 transition-all self-center md:self-end">
+                  →
+                </span>
               </div>
             ))}
           </motion.div>
@@ -146,7 +155,7 @@ const Index = () => {
                 <span>{PAGE_CONTENT.metrics.timezone}</span>
               </div>
               <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mt-4">
-                <motion.div 
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${PAGE_CONTENT.metrics.optimization}%` }}
                   transition={{ duration: 2, ease: "circOut" }}

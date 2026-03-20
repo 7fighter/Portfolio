@@ -20,7 +20,7 @@ const AboutSection = () => {
       category: 'Database_Systems',
       icon: Database,
       color: 'text-green-400',
-      technologies: ['MongoDB', 'PostgreSQL', 'Redis', 'Firebase']
+      technologies: ['MongoDB', 'PostgreSQL', 'Convex', 'Supabase']
     },
     {
       category: 'Design_UX',
