@@ -154,7 +154,7 @@ const TestimonialSystem = () => {
                   value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} 
                 />
                 <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
-                  Identify_User
+                  _User_name
                 </label>
               </div>
 
@@ -165,7 +165,7 @@ const TestimonialSystem = () => {
                   value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} 
                 />
                 <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
-                  Entity_ID
+                  Email_ID
                 </label>
               </div>
             </div>
@@ -177,7 +177,7 @@ const TestimonialSystem = () => {
                 value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} 
               />
               <label className="absolute left-0 top-2 text-zinc-500 text-[9px] font-mono uppercase tracking-widest transition-all peer-focus:-top-4 peer-focus:text-accent peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-accent">
-                Transmission_Data
+                Write_Review
               </label>
             </div>
 
@@ -201,7 +201,7 @@ const TestimonialSystem = () => {
       {/* --- LOGS FEED --- */}
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-500">Decrypted_Logs</h3>
+          <h3 className="text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-500">Decrypted_Reviews</h3>
           <div className="h-[1px] flex-grow bg-white/10" />
         </div>
 

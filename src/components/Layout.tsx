@@ -84,11 +84,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   const navigationItems = [
     { path: '/', icon: Terminal, label: 'ROOT' },
-    { path: '/projects', icon: Cpu, label: 'CORES' },
-    { path: '/education', icon: Library, label: 'DATA' },
-    { path: '/hobbies', icon: Aperture, label: 'SENSORS' },
+    { path: '/projects', icon: Cpu, label: 'Projects' },
+    { path: '/education', icon: Library, label: 'Education' },
+    { path: '/hobbies', icon: Aperture, label: 'CoCurricular' },
     { path: '/about', icon: Fingerprint, label: 'BIO' },
-    { path: '/contact', icon: Zap, label: 'UPLINK' }
+    { path: '/contact', icon: Zap, label: 'ReachOut' }
   ];
 
   return (
