@@ -10,7 +10,7 @@ This project is a personal portfolio application built with React, TypeScript, a
 Visit website at:
 
 ```link
-Add your deployed URL here
+portfolio-seven-flax-42.vercel.app/
 ```
 
 ## Key Features

@@ -1,9 +1,14 @@
 import { motion, Variants } from 'framer-motion';
 import { Code, Database, Server, Palette, Brain, Target, Cpu, Shield, Sparkles } from 'lucide-react';
 import Layout from '@/components/Layout';
-import { useState } from 'react';
+import HeroSection from '@/components/HeroSection';
+import { useState,useEffect } from 'react';
 
 const Index = () => {
+   const [showHero, setShowHero] = useState(false);
+  const [heroComplete, setHeroComplete] = useState(false);
+
+
     const [time, setTime] = useState(new Date().toLocaleTimeString());
   
   const skills = [
@@ -50,6 +55,24 @@ const Index = () => {
       transition: { type: "spring", stiffness: 260, damping: 25 } 
     }
   };
+  
+  
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
+    const hasVisited = localStorage.getItem('portfolio_visited');
+    
+    if (!hasVisited) {
+      setShowHero(true);
+      localStorage.setItem('portfolio_visited', 'true');
+    } else {
+      setHeroComplete(true);
+    }
+    return () => clearInterval(timer);
+  }, []);
+
+  if (showHero && !heroComplete) {
+    return <HeroSection onComplete={() => setHeroComplete(true)} />;
+  }
 
   return (
     <Layout>
