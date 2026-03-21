@@ -9,7 +9,7 @@ const HobbiesSection = () => {
       title: 'Photography',
       tag: 'VISUALS',
       description: 'Capturing the world through a lens. Specialized in street photography and high-contrast portraits.',
-      skills: ['Lightroom', 'Composition', 'Color Grading']
+      skills: [ 'Composition', 'Color Grading']
     },
     {
       icon: Trophy,

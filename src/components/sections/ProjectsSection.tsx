@@ -25,7 +25,7 @@ const ProjectsSection = () => {
     {
       title: 'Habit Flow',
       id: 'PRJ-003',
-      description: 'Build in collaboration wiht the team include Advanced data visualization',
+      description: 'Build in collaboration with the team include Advanced data visualization',
       techStack: ['TypeScript', 'Vite', 'Framer Motion', 'Framer motion'],
       githubUrl: 'https://github.com/maaz-n/flowbit',
       liveUrl: 'https://flowbit-three.vercel.app/'

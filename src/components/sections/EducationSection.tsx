@@ -18,7 +18,7 @@ const EducationSection = () => {
       institution: 'Federal College Of Science & Commerce',
       location: 'Attock, Pakistan',
       period: '2019 - 2021',
-      grade: 'Marks: 85%',
+      grade: 'Marks: 84%',
       description: 'The foundation of code. Transitioned from theory to practical implementation, focusing on mathematics and physics fundamentals.',
       tags: ['Mathematics', 'Physics', 'Fundamentals']
     },
@@ -27,7 +27,7 @@ const EducationSection = () => {
       institution: 'Jinnah Public School',
       location: 'Attock, Pakistan',
       period: '2017 - 2019',
-      grade: 'Marks: 85%',
+      grade: 'Marks: 84%',
       description: 'The spark of curiosity. Strong foundation in sciences and academic excellence that paved the way for a technical future.',
       tags: ['Science', 'Academic Excellence']
     }
@@ -65,8 +65,9 @@ const EducationSection = () => {
           </div>
           <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter">
             KNOWLEDGE <br />
-            <span className="text-outline-white text-white/10 italic">ACQUISITION</span>
-          </h1>
+<span className="text-outline-white text-white/10 italic break-all md:break-normal">
+  ACQUISITION
+</span>          </h1>
         </motion.div>
 
         {/* --- STORYLINE TIMELINE --- */}
