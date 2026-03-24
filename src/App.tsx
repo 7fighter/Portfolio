@@ -28,7 +28,6 @@ const App = () => (
             <Route path="/about" element={<AboutSection />} />
             <Route path="/contact" element={<ContactSection />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            // Inside your Routes
 <Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

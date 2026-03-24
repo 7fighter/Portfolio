@@ -53,8 +53,8 @@ const ContactSection = () => {
    {/* Social Nodes - Responsive & Kinetic */}
 <div className="flex items-center gap-1 md:gap-4 border-l border-white/10 pl-4 md:pl-8 mt-6 md:mt-0">
   {[
-    { icon: Linkedin, href: "https://linkedin.com/in/your-profile", label: "LINKEDIN" },
-    { icon: Instagram, href: "https://instagram.com/your-handle", label: "INSTA" }
+    { icon: Linkedin, href: "https://www.linkedin.com/in/syed-abbss-aa3b8b253/", label: "LINKEDIN" },
+    { icon: Instagram, href: "https://www.instagram.com/abbas._.haider_?igsh=MXd0MHdzeGgxenNpaA==", label: "INSTA" }
   ].map((social, index) => (
     <motion.a
       key={index}
